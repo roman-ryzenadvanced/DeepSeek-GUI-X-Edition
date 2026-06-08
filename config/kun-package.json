@@ -1,0 +1,17 @@
+{
+  "name": "kun",
+  "version": "0.1.0",
+  "description": "Kun local HTTP/SSE agent runtime for DeepSeek-GUI (X Edition patched)",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "bin": {
+    "kun": "./dist/cli/serve-entry.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "better-sqlite3": "^12.10.0",
+    "diff": "^8.0.4",
+    "zod": "^4.4.3"
+  }
+}

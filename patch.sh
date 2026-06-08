@@ -125,7 +125,7 @@ find_kun_modules() {
     fi
 
     warn "kun-node_modules not found in X Edition repo."
-    warn "The patched runtime may need 'npm install' in kun-patched/ to work."
+    warn "The patched runtime will run 'npm install' to fetch all dependencies."
 }
 
 # --- Detect existing DeepSeek GUI installation ---
@@ -201,6 +201,27 @@ install_kun_runtime() {
         fi
         cp -r "$KUN_MODULES_DIR" "$KUN_PATCHED_DIR/node_modules"
         ok "Copied kun-node_modules/ -> $KUN_PATCHED_DIR/node_modules"
+    fi
+
+    # Copy package.json for native module resolution
+    local pkg_json="$XEDITION_DIR/config/kun-package.json"
+    if [ -f "$pkg_json" ]; then
+        cp "$pkg_json" "$KUN_PATCHED_DIR/package.json"
+        ok "Copied kun-package.json -> $KUN_PATCHED_DIR/package.json"
+    fi
+
+    # Build native modules (e.g. better-sqlite3) if npm is available
+    if command -v npm >/dev/null 2>&1 && [ -f "$KUN_PATCHED_DIR/package.json" ]; then
+        info "Building native modules in kun-patched/ ..."
+        (cd "$KUN_PATCHED_DIR" && npm install --omit=dev 2>&1) && {
+            ok "Native modules built successfully"
+        } || {
+            warn "npm install failed — some native features may not work."
+            warn "Run manually: cd $KUN_PATCHED_DIR && npm install --omit=dev"
+        }
+    elif [ -f "$KUN_PATCHED_DIR/package.json" ]; then
+        warn "npm not found. Native modules (better-sqlite3) won't be built."
+        warn "Install Node.js and run: cd $KUN_PATCHED_DIR && npm install --omit=dev"
     fi
 
     # Verify the patched file
