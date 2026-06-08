@@ -2,6 +2,16 @@
 
 > Extended DeepSeek GUI with multi-provider support — enabling GLM models (glm-5.1, glm-5-turbo, glm-4.7, and more) from [z.ai](https://z.ai) alongside the original DeepSeek models.
 
+---
+
+> **Get 10% OFF Z.ai Coding Plans** — Access the latest GLM models for coding with an exclusive discount.
+>
+> 👉 **[Claim Your 10% OFF →](https://z.ai/subscribe?ic=ROK78RJKNW)**
+>
+> Power your development with state-of-the-art AI models — from code generation to full-stack apps.
+
+---
+
 ## What Is This
 
 DeepSeek GUI X Edition is a patched and configured version of the [DeepSeek GUI](https://github.com/deepseek-ai) desktop application (Electron + Kun runtime). It extends the original to support **any OpenAI-compatible API provider**, with specific fixes for the z.ai `api.z.ai` endpoint that serves GLM models.
@@ -114,7 +124,8 @@ DeepSeek-GUI-X-Edition/
 │   └── gui-settings.json            # GUI settings reference with GLM models
 ├── docs/                            # Documentation
 │   ├── ROOT-CAUSE-ANALYSIS.md       # Detailed root cause of each issue
-│   └── GLM-INTEGRATION-GUIDE.md     # Step-by-step GLM provider integration
+│   ├── GLM-INTEGRATION-GUIDE.md     # Step-by-step GLM provider integration
+│   └── PROOF-OF-WORK.md             # Real API responses as evidence
 ├── tests/                           # Test documentation
 │   └── TEST_REPORT.md               # Verification tests and results
 ├── scripts/                         # Helper scripts
@@ -153,17 +164,23 @@ buildUrl(path) {
 
 ## Supported Models
 
-| Model | Provider | Context Window | Tool Calling |
-|-------|----------|---------------|-------------|
-| deepseek-v4-pro | DeepSeek | 1,000,000 | ✓ |
-| deepseek-v4-flash | DeepSeek | 1,000,000 | ✓ |
-| glm-5.1 | z.ai | 128,000 | ✓ |
-| glm-5-turbo | z.ai | 128,000 | ✓ |
-| glm-5 | z.ai | 128,000 | ✓ |
-| glm-4.7 | z.ai | 128,000 | ✓ |
-| glm-4.6 | z.ai | 128,000 | ✓ |
-| glm-4.5 | z.ai | 128,000 | ✓ |
-| glm-4.5-air | z.ai | 128,000 | ✓ |
+Based on the **custom provider you add**, you will be able to use that provider's models. For example, after adding the **Z.ai** endpoint (`https://api.z.ai/api/coding/paas/v4`), I could use these models:
+
+| Model | Provider | Context Window | Tool Calling | Streaming |
+|-------|----------|---------------|-------------|-----------|
+| deepseek-v4-pro | DeepSeek | 1,000,000 | ✓ | ✓ |
+| deepseek-v4-flash | DeepSeek | 1,000,000 | ✓ | ✓ |
+| glm-5.1 | Z.ai | 128,000 | ✓ | ✓ |
+| glm-5-turbo | Z.ai | 128,000 | ✓ | ✓ |
+| glm-5 | Z.ai | 128,000 | ✓ | ✓ |
+| glm-4.7 | Z.ai | 128,000 | ✓ | ✓ |
+| glm-4.6 | Z.ai | 128,000 | ✓ | ✓ |
+| glm-4.5 | Z.ai | 128,000 | ✓ | ✓ |
+| glm-4.5-air | Z.ai | 128,000 | ✓ | ✓ |
+
+> **Want access to GLM models?** [Get 10% OFF your Z.ai Coding Plan →](https://z.ai/subscribe?ic=ROK78RJKNW)
+
+The same approach works for any other OpenAI-compatible provider — just update the base URL, add your models to the Kun config and GUI settings, and the patched runtime handles the rest.
 
 ## Credits
 
