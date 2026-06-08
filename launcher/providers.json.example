@@ -1,0 +1,28 @@
+{
+  "gui_executable": "",
+  "providers": {
+    "zai": {
+      "base_url": "https://api.z.ai/api/coding/paas/v4",
+      "api_key": "YOUR_API_KEY_HERE",
+      "models": [
+        "glm-5.1",
+        "glm-5-turbo",
+        "glm-5",
+        "glm-4.7",
+        "glm-4.6",
+        "glm-4.5",
+        "glm-4.5-air"
+      ]
+    },
+    "deepseek": {
+      "base_url": "https://api.deepseek.com/v1",
+      "api_key": "YOUR_API_KEY_HERE",
+      "models": [
+        "deepseek-v4-pro",
+        "deepseek-v4-flash",
+        "deepseek-chat",
+        "deepseek-reasoner"
+      ]
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # DeepSeek GUI X Edition
 
-> Extended DeepSeek GUI with multi-provider support — enabling GLM models (glm-5.1, glm-5-turbo, glm-4.7, and more) from [z.ai](https://z.ai) alongside the original DeepSeek models.
+> Extended DeepSeek GUI with multi-provider support — use **any OpenAI-compatible AI provider** (z.ai/GLM, DeepSeek, Ollama, OpenRouter, vLLM, LM Studio, etc.) with an interactive terminal launcher.
 
 ## What Is This
 
@@ -10,10 +10,69 @@ DeepSeek GUI X Edition is a patched and configured version of the [DeepSeek GUI]
 
 | Area | Change |
 |------|--------|
+| **CLI Launcher** | Interactive `dsgui` launcher: add any provider, auto-discover models, launch GUI with one command |
 | **URL Routing** | Patched Kun's `buildUrl()` to handle versioned base URLs (e.g., `/v4`) that don't use `/v1/` prefix |
 | **Model Profiles** | Added GLM model profiles (glm-5.1, glm-5-turbo, glm-5, glm-4.7, glm-4.6, glm-4.5, glm-4.5-air) to Kun config |
 | **Provider Registry** | Extended GUI settings to list GLM models in the model selector dropdown |
 | **Binary Override** | Uses `binaryPath` setting to load patched Kun runtime from a permanent location |
+
+---
+
+## Quick Start: `dsgui` Launcher (Recommended)
+
+The easiest way to use DeepSeek GUI X Edition with **any AI provider** is the `dsgui` launcher. It provides an interactive terminal menu to add providers, auto-discover models, and launch the GUI with the right configuration -- all automatically.
+
+```bash
+# Clone this repo
+git clone https://github.com/roman-ryzenadvanced/DeepSeek-GUI-X-Edition.git
+cd DeepSeek-GUI-X-Edition
+
+# Set up the launcher
+cp launcher/dsgui-launcher.py ~/.deepseekgui/dsgui-launcher.py
+cp launcher/providers.json.example ~/.deepseekgui/providers.json
+
+# Add alias (add to ~/.bashrc or ~/.zshrc)
+alias dsgui='python3 ~/.deepseekgui/dsgui-launcher.py'
+
+# Launch!
+dsgui
+```
+
+### Launcher Commands
+
+| Command | Description |
+|---------|-------------|
+| `dsgui` | Interactive menu: pick provider & model, launch GUI |
+| `dsgui --add` | Add a new provider (name, base URL, API key, auto-discover models) |
+| `dsgui --remove` | Remove a configured provider |
+| `dsgui --list` | List all providers and their models |
+| `dsgui --model` | Add a custom model to an existing provider |
+| `dsgui --quick zai` | Quick-launch with first model from provider "zai" |
+
+### How It Works
+
+1. You add providers with `--add` (name, base URL, API key)
+2. The launcher **auto-discovers available models** from the provider's `/models` endpoint
+3. You pick a provider and model from the interactive menu
+4. The launcher **patches GUI settings and Kun config** automatically with the selected provider/model
+5. It **launches DeepSeek GUI** with the correct configuration
+
+Works with **any OpenAI-compatible API**: z.ai (GLM), DeepSeek, Ollama, OpenRouter, vLLM, LM Studio, and more.
+
+### Example: Add z.ai provider
+
+```
+$ dsgui --add
+  Provider name: zai
+  Base URL: https://api.z.ai/api/coding/paas/v4
+  API Key: your-key-here
+  Discovering models...
+  Found 7 models (12 total)
+  Use discovered models? [Y/n]: Y
+  Provider 'zai' added with 7 models.
+```
+
+Then just run `dsgui`, pick "zai", pick "glm-5.1", and the GUI launches ready to go.
 
 ---
 
@@ -167,6 +226,9 @@ python3 scripts/install.py --gui-settings ~/.config/deepseek-gui/deepseek-gui-se
 DeepSeek-GUI-X-Edition/
 ├── install.sh                      # Linux/macOS source installer
 ├── install.ps1                     # Windows source installer
+├── launcher/                       # Multi-provider CLI launcher
+│   ├── dsgui-launcher.py            # Interactive provider/model selector + launcher
+│   └── providers.json.example       # Sample providers config template
 ├── patches/                        # Patch files and diffs
 │   ├── buildUrl-fix.patch          # Core URL routing fix
 │   ├── deepseek-compat-model-client.original.js
