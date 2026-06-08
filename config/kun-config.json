@@ -1,0 +1,269 @@
+{
+  "serve": {
+    "approvalPolicy": "auto",
+    "sandboxMode": "workspace-write",
+    "tokenEconomy": {
+      "enabled": true,
+      "compressToolDescriptions": true,
+      "compressToolResults": true,
+      "conciseResponses": true,
+      "historyHygiene": {
+        "maxToolResultLines": 320,
+        "maxToolResultBytes": 32768,
+        "maxToolResultTokens": 8000,
+        "maxToolArgumentStringBytes": 8192,
+        "maxToolArgumentStringTokens": 2000,
+        "maxArrayItems": 80
+      }
+    },
+    "storage": {
+      "backend": "hybrid"
+    }
+  },
+  "models": {
+    "profiles": {
+      "deepseek-v4-pro": {
+        "contextWindowTokens": 1000000,
+        "contextCompaction": {
+          "softThreshold": 980000,
+          "hardThreshold": 990000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "deepseek-v4-flash": {
+        "aliases": [
+          "deepseek-chat",
+          "deepseek-reasoner"
+        ],
+        "contextWindowTokens": 1000000,
+        "contextCompaction": {
+          "softThreshold": 980000,
+          "hardThreshold": 990000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-5.1": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-5-turbo": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-5": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-4.7": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-4.6": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-4.5": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      },
+      "glm-4.5-air": {
+        "contextWindowTokens": 128000,
+        "contextCompaction": {
+          "softThreshold": 120000,
+          "hardThreshold": 124000
+        },
+        "inputModalities": [
+          "text"
+        ],
+        "outputModalities": [
+          "text"
+        ],
+        "supportsToolCalling": true,
+        "messageParts": [
+          "text"
+        ]
+      }
+    }
+  },
+  "contextCompaction": {
+    "defaultSoftThreshold": 16000,
+    "defaultHardThreshold": 24000,
+    "summaryMode": "heuristic",
+    "summaryTimeoutMs": 15000,
+    "summaryMaxTokens": 1200,
+    "summaryInputMaxBytes": 98304
+  },
+  "runtime": {
+    "toolStorm": {
+      "enabled": true,
+      "windowSize": 8,
+      "threshold": 3
+    },
+    "toolArgumentRepair": {
+      "maxStringBytes": 524288
+    }
+  },
+  "capabilities": {
+    "mcp": {
+      "enabled": true,
+      "servers": {
+        "gui_schedule": {
+          "enabled": true,
+          "transport": "stdio",
+          "command": "/deepseek-gui",
+          "args": [
+            "/resources/app.asar/out/main/claw-schedule-mcp-node-entry.js",
+            "--gui-schedule-mcp-server",
+            "--base-url",
+            "http://127.0.0.1:8788"
+          ],
+          "env": {
+            "ELECTRON_RUN_AS_NODE": "1"
+          },
+          "trustScope": "user",
+          "timeoutMs": 5000
+        }
+      },
+      "search": {
+        "enabled": true,
+        "mode": "auto",
+        "autoThresholdToolCount": 24,
+        "topKDefault": 5,
+        "topKMax": 10,
+        "minScore": 0.15,
+        "bm25": {
+          "k1": 1.2,
+          "b": 0.75
+        }
+      }
+    },
+    "web": {
+      "enabled": true,
+      "fetchEnabled": true,
+      "searchEnabled": false,
+      "allowDomains": [],
+      "denyDomains": []
+    },
+    "skills": {
+      "enabled": true,
+      "roots": [
+        "~/.agents/skills",
+        "~/.codex/plugins/cache/openai-primary-runtime/documents/26.601.10930/skills",
+        "~/.codex/plugins/cache/openai-primary-runtime/presentations/26.601.10930/skills",
+        "~/.codex/plugins/cache/openai-curated/figma/d947469e/skills",
+        "~/.codex/plugins/cache/openai-primary-runtime/spreadsheets/26.601.10930/skills",
+        "~/.codex/plugins/cache/openai-bundled/chrome/0.1.7/skills"
+      ],
+      "legacySkillMd": true
+    },
+    "attachments": {
+      "enabled": true,
+      "maxImageBytes": 5242880,
+      "maxImageDimension": 4096,
+      "allowedMimeTypes": [
+        "image/png",
+        "image/jpeg",
+        "image/webp"
+      ],
+      "textFallbackMaxBase64Bytes": 524288,
+      "textFallbackMaxImageDimension": 1280,
+      "textFallbackPreferredMimeType": "image/webp"
+    }
+  }
+}

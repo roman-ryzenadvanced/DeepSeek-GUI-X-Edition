@@ -1,0 +1,18 @@
+--- patches/deepseek-compat-model-client.original.js	2026-06-07 22:39:12.000000000 +0400
++++ patches/deepseek-compat-model-client.patched.js	2026-06-08 09:47:48.088909206 +0400
+@@ -74,7 +74,14 @@
+         yield* this.streamSse(response.body, request.abortSignal);
+     }
+     buildUrl(path) {
+-        const base = this.config.baseUrl.replace(/\/+$/, '');
++        const base = this.config.baseUrl.replace(/\/+$/, "");
++        if (path === "/v1/chat/completions") {
++            if (base.endsWith("/chat/completions"))
++                return base;
++            const versioned = /\/v\d+$/.test(base);
++            if (versioned)
++                return `${base}/chat/completions`;
++        }
+         return `${base}${path}`;
+     }
+     buildHeaders(stream) {

@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "locale": "en",
+  "theme": "system",
+  "uiFontScale": "small",
+  "provider": {
+    "apiKey": "YOUR_API_KEY_HERE",
+    "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+    "providers": [
+      {
+        "id": "deepseek",
+        "name": "DeepSeek",
+        "apiKey": "YOUR_API_KEY_HERE",
+        "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+        "models": [
+          "deepseek-v4-flash",
+          "deepseek-v4-pro",
+          "glm-5.1",
+          "glm-5-turbo",
+          "glm-5",
+          "glm-4.7",
+          "glm-4.6",
+          "glm-4.5",
+          "glm-4.5-air"
+        ]
+      }
+    ]
+  },
+  "agents": {
+    "kun": {
+      "binaryPath": "~/.deepseekgui/kun-patched",
+      "port": 8899,
+      "autoStart": true,
+      "apiKey": "",
+      "baseUrl": "",
+      "providerId": "",
+      "runtimeToken": "",
+      "dataDir": "~/.deepseekgui/kun",
+      "model": "deepseek-v4-pro",
+      "approvalPolicy": "auto",
+      "sandboxMode": "workspace-write",
+      "tokenEconomyMode": true,
+      "tokenEconomy": {
+        "enabled": true,
+        "compressToolDescriptions": true,
+        "compressToolResults": true,
+        "conciseResponses": true,
+        "historyHygiene": {
+          "maxToolResultLines": 320,
+          "maxToolResultBytes": 32768,
+          "maxToolResultTokens": 8000,
+          "maxToolArgumentStringBytes": 8192,
+          "maxToolArgumentStringTokens": 2000,
+          "maxArrayItems": 80
+        }
+      },
+      "insecure": false,
+      "mcpSearch": {
+        "enabled": true,
+        "mode": "auto",
+        "autoThresholdToolCount": 24,
+        "topKDefault": 5,
+        "topKMax": 10,
+        "minScore": 0.15
+      },
+      "storage": {
+        "backend": "hybrid",
+        "sqlitePath": ""
+      },
+      "contextCompaction": {
+        "defaultSoftThreshold": 16000,
+        "defaultHardThreshold": 24000,
+        "summaryMode": "heuristic",
+        "summaryTimeoutMs": 15000,
+        "summaryMaxTokens": 1200,
+        "summaryInputMaxBytes": 98304
+      },
+      "runtimeTuning": {
+        "toolStorm": {
+          "enabled": true,
+          "windowSize": 8,
+          "threshold": 3
+        },
+        "toolArgumentRepair": {
+          "maxStringBytes": 524288
+        }
+      }
+    }
+  },
+  "workspaceRoot": "~/.deepseekgui/default_workspace",
+  "log": {
+    "enabled": true,
+    "retentionDays": 2
+  },
+  "notifications": {
+    "turnComplete": true
+  },
+  "guiUpdate": {
+    "channel": "stable"
+  },
+  "write": {
+    "defaultWorkspaceRoot": "~/.deepseekgui/write_workspace",
+    "activeWorkspaceRoot": "~/.deepseekgui/write_workspace",
+    "workspaces": [
+      "~/.deepseekgui/write_workspace"
+    ],
+    "inlineCompletion": {
+      "enabled": true,
+      "retrievalEnabled": true,
+      "longCompletionEnabled": true,
+      "apiKey": "",
+      "baseUrl": "",
+      "inheritModel": true,
+      "model": "deepseek-v4-flash",
+      "debounceMs": 650,
+      "longDebounceMs": 2800,
+      "minAcceptScore": 0.52,
+      "longMinAcceptScore": 0.36,
+      "maxTokens": 96,
+      "longMaxTokens": 256
+    }
+  },
+  "claw": {
+    "enabled": false,
+    "skills": {
+      "defaultNames": [],
+      "extraDirs": [],
+      "promptPrefix": ""
+    },
+    "im": {
+      "enabled": false,
+      "provider": "feishu",
+      "port": 8787,
+      "path": "/claw/im",
+      "secret": "",
+      "weixinBridgeUrl": "http://127.0.0.1:18790/api/v1/admin/rpc",
+      "workspaceRoot": "",
+      "model": "auto",
+      "mode": "agent",
+      "responseTimeoutMs": 120000
+    },
+    "channels": [],
+    "tasks": []
+  },
+  "schedule": {
+    "enabled": false,
+    "defaultWorkspaceRoot": "",
+    "model": "auto",
+    "mode": "agent",
+    "promptPrefix": "",
+    "skills": {
+      "defaultNames": [],
+      "extraDirs": []
+    },
+    "keepAwake": false,
+    "internal": {
+      "port": 8788,
+      "secret": ""
+    },
+    "tasks": []
+  }
+}
