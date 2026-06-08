@@ -2,6 +2,31 @@
 
 All notable changes to DeepSeek GUI X Edition are documented here.
 
+## [1.1.0] - 2026-06-08
+
+### Added
+- **Multi-Provider Launcher** (`launcher/dsgui-launcher.py`)
+  - Interactive terminal UI to select provider → model → launch GUI
+  - Auto-discovery of models from any OpenAI-compatible `/models` endpoint
+  - Add/remove providers and custom models from the CLI
+  - Auto-detects DeepSeek GUI executable on Linux, macOS, and WSL2
+  - Patches both levels of `deepseek-gui-settings.json` (top-level provider config AND provider array)
+  - Generates Kun model profiles with correct context windows automatically
+  - Kills existing GUI instance before relaunching with new config
+  - Zero dependencies (pure Python, no pip install needed)
+  - CLI commands: `dsgui`, `dsgui --add`, `dsgui --remove`, `dsgui --list`, `dsgui --model`, `dsgui --quick <name>`
+
+### Fixed
+- **"Kun turn failed" with custom providers**
+  - Root cause: DeepSeek GUI uses a dual-level config — `provider.baseUrl` (what Kun reads) and `provider.providers[0].baseUrl` (what the dropdown reads). Only patching one level caused a mismatch where Kun would hit the wrong API endpoint
+  - Fix: The launcher patches BOTH config levels simultaneously, ensuring the runtime endpoint and the UI always match
+  - This eliminates all provider-switching errors regardless of which provider or model is selected
+
+### Platform Support
+- **Linux**: Auto-detects AppImage at `~/Applications/DeepSeek-GUI.AppImage`
+- **macOS**: Auto-detects `.app` bundle in `~/Applications/` and `/Applications/`
+- **WSL2**: Detected automatically, uses same Linux paths
+
 ## [1.0.0] - 2026-06-08
 
 ### Added
@@ -24,10 +49,10 @@ All notable changes to DeepSeek GUI X Edition are documented here.
 - **GLM models not appearing in model selector** (UI)
   - Root cause: GUI settings `provider.providers[0].models` array only listed DeepSeek model IDs
   - Fix: Extended the models array to include all GLM model IDs
-  - Note: GUI may reset this on restart; the install script handles re-injection
+  - Note: GUI may reset this on restart; the launcher handles re-injection
   - See: `config/gui-settings.json`
 
 ### Known Limitations
-- The GUI settings file may be overwritten by the application on startup, requiring re-application of GLM model entries
+- The GUI settings file may be overwritten by the application on startup, requiring re-application of model entries (the launcher handles this automatically)
 - The `binaryPath` override is required because the AppImage bundles Kun inside a read-only ASAR archive
 - Only tested on Linux (Ubuntu 26.04) with the AppImage distribution
