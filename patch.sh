@@ -125,7 +125,7 @@ find_kun_modules() {
     fi
 
     warn "kun-node_modules not found in X Edition repo."
-    warn "The patched runtime will run 'npm install' to fetch all dependencies."
+    warn "The patched runtime will run 'npm install' + '@electron/rebuild' to fetch and compile dependencies."
 }
 
 # --- Detect existing DeepSeek GUI installation ---
@@ -210,18 +210,64 @@ install_kun_runtime() {
         ok "Copied kun-package.json -> $KUN_PATCHED_DIR/package.json"
     fi
 
-    # Build native modules (e.g. better-sqlite3) if npm is available
+    # Build native modules for Electron's Node.js ABI
+    # better-sqlite3 is a native addon that must match Electron's MODULE_VERSION,
+    # NOT the system Node.js version. We use @electron/rebuild to detect the
+    # Electron version from the AppImage and compile accordingly.
     if command -v npm >/dev/null 2>&1 && [ -f "$KUN_PATCHED_DIR/package.json" ]; then
-        info "Building native modules in kun-patched/ ..."
+        # First, install dependencies (fetches better-sqlite3 source if not present)
+        info "Installing dependencies in kun-patched/ ..."
         (cd "$KUN_PATCHED_DIR" && npm install --omit=dev 2>&1) && {
-            ok "Native modules built successfully"
+            ok "Dependencies installed successfully"
         } || {
-            warn "npm install failed — some native features may not work."
-            warn "Run manually: cd $KUN_PATCHED_DIR && npm install --omit=dev"
+            warn "npm install failed — attempting electron-rebuild anyway."
         }
+
+        # Detect Electron version from the installed AppImage
+        local electron_version=""
+        local appimage_path=""
+        # Try common AppImage locations
+        for candidate in \
+            "$HOME/Applications/DeepSeek-GUI.AppImage" \
+            "$HOME/Downloads/DeepSeek-GUI.AppImage" \
+            "/opt/DeepSeek-GUI.AppImage" \
+            "/usr/local/bin/DeepSeek-GUI.AppImage"; do
+            if [ -f "$candidate" ]; then
+                appimage_path="$candidate"
+                break
+            fi
+        done
+
+        # Also check mounted AppImages in /tmp
+        if [ -z "$appimage_path" ]; then
+            local mounted=$(find /tmp/.mount_DeepSe* -maxdepth 0 -type d 2>/dev/null | head -1)
+            if [ -n "$mounted" ]; then
+                appimage_path=$(find "$mounted" -name "deepseek-gui" -type f -executable 2>/dev/null | head -1)
+            fi
+        fi
+
+        if [ -n "$appimage_path" ]; then
+            electron_version=$(ELECTRON_RUN_AS_NODE=1 "$appimage_path" -e "console.log(process.versions.electron)" 2>/dev/null)
+        fi
+
+        if [ -n "$electron_version" ]; then
+            info "Detected Electron v${electron_version} — rebuilding native modules for its Node ABI..."
+            (cd "$KUN_PATCHED_DIR" && npx @electron/rebuild@latest --version="$electron_version" 2>&1) && {
+                ok "Native modules rebuilt for Electron v${electron_version}"
+            } || {
+                warn "@electron/rebuild failed — native modules may not work."
+                warn "Run manually: cd $KUN_PATCHED_DIR && npx @electron/rebuild --version=$electron_version"
+            }
+        else
+            warn "Could not detect Electron version — skipping native rebuild."
+            warn "Native modules were built for system Node.js, which may not match Electron's ABI."
+            warn "To rebuild manually, find your Electron version and run:"
+            warn "  cd $KUN_PATCHED_DIR && npx @electron/rebuild --version=<ELECTRON_VERSION>"
+        fi
     elif [ -f "$KUN_PATCHED_DIR/package.json" ]; then
         warn "npm not found. Native modules (better-sqlite3) won't be built."
         warn "Install Node.js and run: cd $KUN_PATCHED_DIR && npm install --omit=dev"
+        warn "Then rebuild for Electron: cd $KUN_PATCHED_DIR && npx @electron/rebuild --version=<ELECTRON_VERSION>"
     fi
 
     # Verify the patched file
