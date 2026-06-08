@@ -168,8 +168,6 @@ Based on the **custom provider you add**, you will be able to use that provider'
 
 | Model | Provider | Context Window | Tool Calling | Streaming |
 |-------|----------|---------------|-------------|-----------|
-| deepseek-v4-pro | DeepSeek | 1,000,000 | ✓ | ✓ |
-| deepseek-v4-flash | DeepSeek | 1,000,000 | ✓ | ✓ |
 | glm-5.1 | Z.ai | 128,000 | ✓ | ✓ |
 | glm-5-turbo | Z.ai | 128,000 | ✓ | ✓ |
 | glm-5 | Z.ai | 128,000 | ✓ | ✓ |
