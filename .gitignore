@@ -1,9 +1,18 @@
 node_modules/
-kun-node_modules/
-kun-dist/node_modules/
+dist/
+.asar
+*.asar
 *.sqlite3-shm
 *.sqlite3-wal
 .env
 .DS_Store
 Thumbs.db
 *.log
+tmp/
+
+# Pre-built Kun runtime (large binary deps - build from source instead)
+kun-dist/
+kun-node_modules/
+
+# Packaging artifacts
+packaging/deb/opt/
