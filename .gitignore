@@ -16,3 +16,13 @@ kun-node_modules/
 
 # Packaging artifacts
 packaging/deb/opt/
+
+# Never commit actual user config with real keys
+launcher/providers.json
+config/gui-settings.local.json
+config/kun-config.local.json
+
+# Secrets and credentials
+*.pem
+*.key
+*.env.local
