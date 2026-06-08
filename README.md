@@ -149,43 +149,59 @@ This adds GLM models to the GUI model selector and sets the `binaryPath` to the 
 
 ---
 
-## Quick Start (Existing DeepSeek GUI Installation)
+## Patch Existing Installation (Recommended)
 
-If you already have DeepSeek GUI installed (e.g., via AppImage), you can patch it without rebuilding by using the pre-built patched Kun runtime.
+Already have DeepSeek GUI installed? You can add multi-provider support in **one command** — no source build needed. The X Edition repo ships pre-patched Kun runtime files, so you just copy them into place.
 
-**Step 1: Get the patched Kun runtime**
+### Linux / macOS
 
-Option A — Build from upstream source:
-```bash
-git clone https://github.com/XingYu-Zhong/DeepSeek-GUI.git /tmp/deepseek-gui-build
-cd /tmp/deepseek-gui-build
-# Apply the buildUrl patch (see patches/buildUrl-fix.patch)
-# Then build Kun: npm install && npm run build
-```
-
-Option B — Clone this X Edition repo and build Kun:
 ```bash
 git clone https://github.com/roman-ryzenadvanced/DeepSeek-GUI-X-Edition.git
 cd DeepSeek-GUI-X-Edition
-bash install.sh --skip-build
-# kun-dist and kun-node_modules will be in the upstream build
+bash patch.sh
 ```
 
-**Step 2: Patch an existing DeepSeek GUI installation**
+**What `patch.sh` does:**
+1. Auto-detects your existing DeepSeek GUI installation (AppImage, .app bundle, etc.)
+2. Copies the pre-patched Kun runtime to `~/.deepseekgui/kun-patched/`
+3. Patches GUI settings with `binaryPath` override pointing to the patched runtime
+4. Adds GLM model profiles to Kun config
+5. Installs the `dsgui` launcher and adds a shell alias
+
+### Windows
+
+```powershell
+git clone https://github.com/roman-ryzenadvanced/DeepSeek-GUI-X-Edition.git
+cd DeepSeek-GUI-X-Edition
+.\patch.ps1
+```
+
+### After Patching
+
 ```bash
-# Copy the patched Kun runtime to a permanent location
-mkdir -p ~/.deepseekgui/kun-patched
-cp -r /tmp/deepseek-gui-build/kun/dist ~/.deepseekgui/kun-patched/dist
-cp -r /tmp/deepseek-gui-build/kun/node_modules ~/.deepseekgui/kun-patched/node_modules
+# Open a new terminal (or source your shell config)
+source ~/.bashrc   # or ~/.zshrc
 
-# Copy the patched config
-cp config/kun-config.json ~/.deepseekgui/kun/config.json
+# Add your AI provider
+dsgui --add
 
-# Patch GUI settings
-python3 scripts/install.py --gui-settings ~/.config/deepseek-gui/deepseek-gui-settings.json
-
-# Restart DeepSeek GUI
+# Launch!
+dsgui
 ```
+
+### Uninstall Patches
+
+To restore your original DeepSeek GUI installation:
+
+```bash
+# Linux / macOS
+bash patch.sh --uninstall
+
+# Windows
+.\patch.ps1 -Uninstall
+```
+
+This removes the patched runtime, launcher, and shell alias — your DeepSeek GUI goes back to stock.
 
 ---
 
@@ -224,8 +240,10 @@ python3 scripts/install.py --gui-settings ~/.config/deepseek-gui/deepseek-gui-se
 
 ```
 DeepSeek-GUI-X-Edition/
-├── install.sh                      # Linux/macOS source installer
-├── install.ps1                     # Windows source installer
+├── patch.sh                        # Patch existing installation (Linux/macOS) — no build needed
+├── patch.ps1                       # Patch existing installation (Windows) — no build needed
+├── install.sh                      # Full source installer (Linux/macOS)
+├── install.ps1                     # Full source installer (Windows)
 ├── launcher/                       # Multi-provider CLI launcher
 │   ├── dsgui-launcher.py            # Interactive provider/model selector + launcher
 │   └── providers.json.example       # Sample providers config template
